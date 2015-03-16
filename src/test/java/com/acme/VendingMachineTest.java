@@ -7,6 +7,16 @@ import org.junit.Test;
 public class VendingMachineTest {
 
 	@Test
+	public void whenAcceptCoinIsPassed2NickelsCurrentValueIs10Cents() {
+		final VendingMachine vendingMachine = new VendingMachine();
+
+		vendingMachine.acceptCoin(Coin.NICKEL);
+		vendingMachine.acceptCoin(Coin.NICKEL);
+
+		assertEquals(10, vendingMachine.getAcceptedValue());
+	}
+
+	@Test
 	public void whenAcceptCoinIsPassedNickelCurrentValueIs5Cents() {
 		final VendingMachine vendingMachine = new VendingMachine();
 

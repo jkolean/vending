@@ -1,15 +1,20 @@
 package com.acme;
 
+import java.util.ArrayList;
+
 public class VendingMachine {
+	ArrayList<Coin> acceptedCoins = new ArrayList<Coin>();
 
 	public void acceptCoin(final Coin nickel) {
-		// TODO Auto-generated method stub
-
+		acceptedCoins.add(nickel);
 	}
 
 	public int getAcceptedValue() {
-		// TODO Auto-generated method stub
-		return 5;
+		int value = 0;
+		for (final Coin coin : acceptedCoins) {
+			value += coin.getCoinValue();
+		}
+		return value;
 	}
 
 }

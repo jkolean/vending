@@ -7,4 +7,8 @@ public enum Coin {
 	private Coin(final int coinValue) {
 		this.coinValue = coinValue;
 	}
+
+	public int getCoinValue() {
+		return coinValue;
+	}
 }
