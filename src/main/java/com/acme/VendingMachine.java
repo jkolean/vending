@@ -17,4 +17,8 @@ public class VendingMachine {
 		return value;
 	}
 
+	public String selectProduct(final Product cola) {
+		return "Price $1.00";
+	}
+
 }

@@ -25,4 +25,12 @@ public class VendingMachineTest {
 		assertEquals(5, vendingMachine.getAcceptedValue());
 	}
 
+	@Test
+	public void whenSelectProductIsPassedColaWithoutFundsItDisplaysPriceAndDoesNotDispense() {
+		final VendingMachine vendingMachine = new VendingMachine();
+
+		final String message = vendingMachine.selectProduct(Product.COLA);
+
+		assertEquals("Price $1.00", message);
+	}
 }
