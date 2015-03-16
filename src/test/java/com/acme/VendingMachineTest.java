@@ -48,6 +48,22 @@ public class VendingMachineTest {
 	}
 
 	@Test
+	public void whenSelectProductIsPassedColaWithFundsItDisplaysThankYouAndDispense() {
+		final VendingMachine vendingMachine = new VendingMachine();
+		vendingMachine.stockProduct(Product.COLA, 1);
+		final int preColaCount = vendingMachine.getProductCount(Product.COLA);
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.QUARTER);
+
+		final String message = vendingMachine.selectProduct(Product.COLA);
+
+		assertEquals("THANK YOU", message);
+		assertEquals(preColaCount - 1, vendingMachine.getProductCount(Product.COLA));
+	}
+
+	@Test
 	public void whenSelectProductIsPassedColaWithoutFundsItDisplaysPriceAndDoesNotDispense() {
 		final VendingMachine vendingMachine = new VendingMachine();
 		final int preColaCount = vendingMachine.getProductCount(Product.COLA);

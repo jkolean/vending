@@ -1,7 +1,7 @@
 package com.acme;
 
 public enum Coin {
-	NICKEL(5);
+	DIME(10), NICKEL(5), QUARTER(25);
 	int coinValue = 0;
 
 	private Coin(final int coinValue) {
