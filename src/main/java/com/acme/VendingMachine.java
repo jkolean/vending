@@ -52,6 +52,12 @@ public class VendingMachine {
 		return contents.get(product);
 	}
 
+	public void returnCoins() {
+		message = VendingMessage.INSERT_COIN.getDisplayMessage();
+		coinReturn = acceptedCoins;
+		acceptedCoins = new ArrayList<Coin>();
+	}
+
 	public void selectProduct(final Product product) {
 		if (getProductCount(product) == 0) {
 			message = VendingMessage.SOLD_OUT.getDisplayMessage();

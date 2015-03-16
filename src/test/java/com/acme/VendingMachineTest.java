@@ -1,6 +1,7 @@
 package com.acme;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -23,6 +24,24 @@ public class VendingMachineTest {
 		vendingMachine.acceptCoin(Coin.NICKEL);
 
 		assertEquals(5, vendingMachine.getAcceptedValue());
+	}
+
+	@Test
+	public void whenReturnCoinsIsCalledCoinsAreReturnedAndMessageIsUpdated() {
+		final VendingMachine vendingMachine = new VendingMachine();
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.NICKEL);
+		vendingMachine.acceptCoin(Coin.DIME);
+
+		vendingMachine.returnCoins();
+
+		assertEquals("INSERT COIN", vendingMachine.getDisplayMessage());
+		assertEquals("INSERT COIN", vendingMachine.getDisplayMessage());
+		assertEquals(3, vendingMachine.getCoinReturn().size());
+		assertTrue("Expected a quarter", vendingMachine.getCoinReturn().contains(Coin.QUARTER));
+		assertTrue("Expected a nickel", vendingMachine.getCoinReturn().contains(Coin.NICKEL));
+		assertTrue("Expected a dime", vendingMachine.getCoinReturn().contains(Coin.DIME));
+		assertEquals(0, vendingMachine.getAcceptedValue());
 	}
 
 	@Test
