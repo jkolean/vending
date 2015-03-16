@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 public class VendingMachine {
-	List<Coin> acceptedCoins = new ArrayList<Coin>();
-	List<Coin> coinReturn = new ArrayList<Coin>();
-
-	Map<Product, Integer> contents = new HashMap<Product, Integer>();
+	protected List<Coin> acceptedCoins = new ArrayList<Coin>();
+	protected List<Coin> coinReturn = new ArrayList<Coin>();
+	protected Map<Product, Integer> contents = new HashMap<Product, Integer>();
+	protected String message = "";
 
 	public void acceptCoin(final Coin nickel) {
 		acceptedCoins.add(nickel);
@@ -35,6 +35,12 @@ public class VendingMachine {
 		return Collections.unmodifiableList(coinReturn);
 	}
 
+	String getDisplayMessage() {
+		final String messageToReturn = message;
+		message = VendingMessage.INSERT_COIN.getDisplayMessage();
+		return messageToReturn;
+	}
+
 	public int getProductCount(final Product product) {
 		if (!contents.containsKey(product)) {
 			return 0;
@@ -42,17 +48,17 @@ public class VendingMachine {
 		return contents.get(product);
 	}
 
-	public String selectProduct(final Product product) {
+	public void selectProduct(final Product product) {
 		if (getProductCount(product) == 0) {
-			return "SOLD OUT";
+			message = VendingMessage.SOLD_OUT.getDisplayMessage();
 		} else if (getAcceptedValue() >= product.getCost()) {
 			dispense(product);
 			final int change = getAcceptedValue() - product.getCost();
 			updateCoinReturn(change);
 			acceptedCoins = new ArrayList<Coin>();
-			return "THANK YOU";
+			message = VendingMessage.THANK_YOU.getDisplayMessage();
 		} else {
-			return String.format("Price $%.2f", product.getCost() / 100.0);
+			message = VendingMessage.PRICE.getDisplayMessage(product.getCost() / 100.0);
 		}
 	}
 
