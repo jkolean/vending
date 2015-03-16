@@ -43,7 +43,9 @@ public class VendingMachine {
 	}
 
 	public String selectProduct(final Product product) {
-		if (getAcceptedValue() >= product.getCost()) {
+		if (getProductCount(product) == 0) {
+			return "SOLD OUT";
+		} else if (getAcceptedValue() >= product.getCost()) {
 			dispense(product);
 			final int change = getAcceptedValue() - product.getCost();
 			updateCoinReturn(change);
