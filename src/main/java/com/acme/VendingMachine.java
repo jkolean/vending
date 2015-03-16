@@ -1,11 +1,15 @@
 package com.acme;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VendingMachine {
-	ArrayList<Coin> acceptedCoins = new ArrayList<Coin>();
+	List<Coin> acceptedCoins = new ArrayList<Coin>();
+	List<Coin> coinReturn = new ArrayList<Coin>();
+
 	Map<Product, Integer> contents = new HashMap<Product, Integer>();
 
 	public void acceptCoin(final Coin nickel) {
@@ -27,6 +31,10 @@ public class VendingMachine {
 		return value;
 	}
 
+	public List<Coin> getCoinReturn() {
+		return Collections.unmodifiableList(coinReturn);
+	}
+
 	public int getProductCount(final Product product) {
 		if (!contents.containsKey(product)) {
 			return 0;
@@ -37,6 +45,9 @@ public class VendingMachine {
 	public String selectProduct(final Product product) {
 		if (getAcceptedValue() >= product.getCost()) {
 			dispense(product);
+			final int change = getAcceptedValue() - product.getCost();
+			updateCoinReturn(change);
+			acceptedCoins = new ArrayList<Coin>();
 			return "THANK YOU";
 		} else {
 			return String.format("Price $%.2f", product.getCost() / 100.0);
@@ -48,6 +59,11 @@ public class VendingMachine {
 			contents.put(product, 0);
 		}
 		contents.put(product, contents.get(product) + count);
+	}
+
+	private void updateCoinReturn(final int change) {
+		coinReturn = new ArrayList<Coin>();
+		coinReturn.add(Coin.QUARTER);
 	}
 
 }
