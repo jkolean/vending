@@ -37,7 +37,11 @@ public class VendingMachine {
 
 	String getDisplayMessage() {
 		final String messageToReturn = message;
-		message = VendingMessage.INSERT_COIN.getDisplayMessage();
+		if (VendingMessage.SOLD_OUT.getDisplayMessage().equals(messageToReturn) && getAcceptedValue() > 0) {
+			message = VendingMessage.DEPOSITED_AMOUNT.getDisplayMessage(getAcceptedValue() / 100.0);
+		} else {
+			message = VendingMessage.INSERT_COIN.getDisplayMessage();
+		}
 		return messageToReturn;
 	}
 
