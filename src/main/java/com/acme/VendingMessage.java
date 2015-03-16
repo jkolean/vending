@@ -1,7 +1,7 @@
 package com.acme;
 
 public enum VendingMessage {
-	EXACT_CHANGE_ONLY("EXACT CHANGE ONLY"), INSERT_COIN("INSERT_COIN"), PRICE("PRICE $%.2f"), SOLD_OUT("SOLD OUT"), THANK_YOU("THANK YOU");
+	EXACT_CHANGE_ONLY("EXACT CHANGE ONLY"), INSERT_COIN("INSERT COIN"), PRICE("PRICE $%.2f"), SOLD_OUT("SOLD OUT"), THANK_YOU("THANK YOU");
 	String message;
 
 	private VendingMessage(final String message) {

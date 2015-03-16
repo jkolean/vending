@@ -34,6 +34,7 @@ public class VendingMachineTest {
 		vendingMachine.selectProduct(Product.CHIPS);
 
 		assertEquals("PRICE $0.50", vendingMachine.getDisplayMessage());
+		assertEquals("INSERT COIN", vendingMachine.getDisplayMessage());
 		assertEquals(preColaCount, vendingMachine.getProductCount(Product.CHIPS));
 	}
 
@@ -46,6 +47,7 @@ public class VendingMachineTest {
 		vendingMachine.selectProduct(Product.CANDY);
 
 		assertEquals("PRICE $0.65", vendingMachine.getDisplayMessage());
+		assertEquals("INSERT COIN", vendingMachine.getDisplayMessage());
 		assertEquals(preColaCount, vendingMachine.getProductCount(Product.CANDY));
 	}
 
@@ -63,6 +65,7 @@ public class VendingMachineTest {
 		vendingMachine.selectProduct(Product.COLA);
 
 		assertEquals("THANK YOU", vendingMachine.getDisplayMessage());
+		assertEquals("INSERT COIN", vendingMachine.getDisplayMessage());
 		assertEquals(preColaCount - 1, vendingMachine.getProductCount(Product.COLA));
 		assertEquals(1, vendingMachine.getCoinReturn().size());
 		assertEquals(Coin.QUARTER, vendingMachine.getCoinReturn().get(0));
@@ -81,6 +84,7 @@ public class VendingMachineTest {
 		vendingMachine.selectProduct(Product.COLA);
 
 		assertEquals("THANK YOU", vendingMachine.getDisplayMessage());
+		assertEquals("INSERT COIN", vendingMachine.getDisplayMessage());
 		assertEquals(preColaCount - 1, vendingMachine.getProductCount(Product.COLA));
 	}
 
@@ -105,6 +109,7 @@ public class VendingMachineTest {
 		vendingMachine.selectProduct(Product.COLA);
 
 		assertEquals("SOLD OUT", vendingMachine.getDisplayMessage());
+		assertEquals("INSERT COIN", vendingMachine.getDisplayMessage());
 		assertEquals(preColaCount, vendingMachine.getProductCount(Product.COLA));
 	}
 }
