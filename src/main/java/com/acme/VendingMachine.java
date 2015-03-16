@@ -17,6 +17,10 @@ public class VendingMachine {
 		return value;
 	}
 
+	public int getProductCount(final Product product) {
+		return 0;
+	}
+
 	public String selectProduct(final Product product) {
 		return String.format("Price $%.2f", product.getCost() / 100.0);
 	}
