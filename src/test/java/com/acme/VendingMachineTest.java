@@ -26,6 +26,15 @@ public class VendingMachineTest {
 	}
 
 	@Test
+	public void whenSelectProductIsPassedchipsWithoutFundsItDisplaysPriceAndDoesNotDispense() {
+		final VendingMachine vendingMachine = new VendingMachine();
+
+		final String message = vendingMachine.selectProduct(Product.Chips);
+
+		assertEquals("Price $0.50", message);
+	}
+
+	@Test
 	public void whenSelectProductIsPassedColaWithoutFundsItDisplaysPriceAndDoesNotDispense() {
 		final VendingMachine vendingMachine = new VendingMachine();
 
