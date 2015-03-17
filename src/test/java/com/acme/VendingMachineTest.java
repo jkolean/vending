@@ -144,4 +144,15 @@ public class VendingMachineTest {
 		assertEquals("INSERT COIN", vendingMachine.getDisplayMessage());
 		assertEquals(preColaCount, vendingMachine.getProductCount(Product.COLA));
 	}
+
+	@Test
+	public void whenWeCanNoMakeChangeThenDisplayExactChange() {
+		final VendingMachine vendingMachine = new VendingMachine();
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.QUARTER);
+
+		assertEquals(VendingMessage.EXACT_CHANGE_ONLY.message, vendingMachine.getDisplayMessage());
+	}
 }

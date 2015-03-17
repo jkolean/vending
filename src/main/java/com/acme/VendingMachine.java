@@ -37,11 +37,15 @@ public class VendingMachine {
 	}
 
 	String getDisplayMessage() {
-		final String messageToReturn = message;
+		final String messageToReturn = "".equals(message) ? VendingMessage.INSERT_COIN.getDisplayMessage() : message;
 		if (VendingMessage.SOLD_OUT.getDisplayMessage().equals(messageToReturn) && getAcceptedValue() > 0) {
 			message = VendingMessage.DEPOSITED_AMOUNT.getDisplayMessage(getAcceptedValue() / 100.0);
 		} else {
 			message = VendingMessage.INSERT_COIN.getDisplayMessage();
+		}
+		if (VendingMessage.INSERT_COIN.getDisplayMessage().equals(messageToReturn)
+				&& changeMaker.canMakeChange(getAcceptedValue(), new Product[] { Product.CANDY, Product.CHIPS, Product.COLA })) {
+			return VendingMessage.EXACT_CHANGE_ONLY.getDisplayMessage();
 		}
 		return messageToReturn;
 	}
