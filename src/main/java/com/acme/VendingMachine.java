@@ -6,6 +6,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This is the brains of a vending machine and has the following core capabilities:<br/>
+ * <br/>
+ * The vending machine may be stocked with products using stockProduct() and coins for the change return are loaded using loadChange() <br/>
+ * <br/>
+ * Coins can be inserted into the the machine with acceptCoin() and the current value of all accepted coins can be accessed with getAcceptedValue() <br/>
+ * <br/>
+ * Users can choose a product to purchase using selectProduct <br/>
+ * <br/>
+ * The message displayed by the machine is accessed with getDisplayMessage(). Note that accessing this method changes the state machine of the message.
+ * Therefore, calling it twice in a row may yield different results.
+ *
+ * @author jameskolean
+ *
+ */
 public class VendingMachine {
 	protected List<Coin> acceptedCoins = new ArrayList<Coin>();
 	protected ChangeMaker changeMaker = new ChangeMaker();
@@ -13,10 +28,20 @@ public class VendingMachine {
 	protected Map<Product, Integer> contents = new HashMap<Product, Integer>();
 	protected String message = "";
 
-	public void acceptCoin(final Coin nickel) {
-		acceptedCoins.add(nickel);
+	/**
+	 * User has entered a coin
+	 *
+	 * @param coin
+	 */
+	public void acceptCoin(final Coin coin) {
+		acceptedCoins.add(coin);
 	}
 
+	/**
+	 * decrement product and lazy initialize the product count
+	 *
+	 * @param product
+	 */
 	private void dispense(final Product product) {
 		if (!contents.containsKey(product)) {
 			return;
@@ -24,7 +49,12 @@ public class VendingMachine {
 		contents.put(product, contents.get(product) - 1);
 	}
 
-	public int getAcceptedValue() {
+	/**
+	 * What's the value of the coins the user has entered
+	 *
+	 * @return value of coins entered
+	 */
+	protected int getAcceptedValue() {
 		int value = 0;
 		for (final Coin coin : acceptedCoins) {
 			value += coin.getCoinValue();
@@ -36,21 +66,26 @@ public class VendingMachine {
 		return Collections.unmodifiableList(coinReturn);
 	}
 
-	String getDisplayMessage() {
+	/**
+	 * State machine for the display message. Calls to the method will transition the state
+	 *
+	 * @return last message
+	 */
+	public String getDisplayMessage() {
 		final String messageToReturn = "".equals(message) ? VendingMessage.INSERT_COIN.getDisplayMessage() : message;
 		if (VendingMessage.SOLD_OUT.getDisplayMessage().equals(messageToReturn) && getAcceptedValue() > 0) {
 			message = VendingMessage.DEPOSITED_AMOUNT.getDisplayMessage(getAcceptedValue() / 100.0);
 		} else {
 			message = VendingMessage.INSERT_COIN.getDisplayMessage();
 		}
-		if (VendingMessage.INSERT_COIN.getDisplayMessage().equals(messageToReturn)
-				&& changeMaker.canMakeChange(getAcceptedValue(), new Product[] { Product.CANDY, Product.CHIPS, Product.COLA })) {
+		if (VendingMessage.INSERT_COIN.getDisplayMessage().equals(messageToReturn) && getAcceptedValue() > Product.CHIPS.getCost()
+				&& !changeMaker.canMakeChange(getAcceptedValue(), new Product[] { Product.CANDY, Product.CHIPS, Product.COLA })) {
 			return VendingMessage.EXACT_CHANGE_ONLY.getDisplayMessage();
 		}
 		return messageToReturn;
 	}
 
-	public int getProductCount(final Product product) {
+	protected int getProductCount(final Product product) {
 		if (!contents.containsKey(product)) {
 			return 0;
 		}
@@ -61,12 +96,17 @@ public class VendingMachine {
 		changeMaker.add(coin, count);
 	}
 
-	public void returnCoins() {
+	protected void returnCoins() {
 		message = VendingMessage.INSERT_COIN.getDisplayMessage();
 		coinReturn = acceptedCoins;
 		acceptedCoins = new ArrayList<Coin>();
 	}
 
+	/**
+	 * User chooses a product they want
+	 * 
+	 * @param product
+	 */
 	public void selectProduct(final Product product) {
 		if (getProductCount(product) == 0) {
 			message = VendingMessage.SOLD_OUT.getDisplayMessage();
@@ -81,6 +121,12 @@ public class VendingMachine {
 		}
 	}
 
+	/**
+	 * Stock person adds product to the vending machine
+	 * 
+	 * @param product
+	 * @param count
+	 */
 	public void stockProduct(final Product product, final int count) {
 		if (!contents.containsKey(product)) {
 			contents.put(product, 0);

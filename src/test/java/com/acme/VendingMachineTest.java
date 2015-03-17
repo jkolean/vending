@@ -3,13 +3,53 @@ package com.acme;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class VendingMachineTest {
 
+	private VendingMachine vendingMachine;
+
+	@Test
+	public void displayMessageAllStateTransitions() {
+		vendingMachine.loadChange(Coin.QUARTER, 1);
+		assertEquals(VendingMessage.INSERT_COIN.message, vendingMachine.getDisplayMessage());
+
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		assertEquals(VendingMessage.INSERT_COIN.message, vendingMachine.getDisplayMessage());
+
+		vendingMachine.acceptCoin(Coin.DIME);
+		vendingMachine.acceptCoin(Coin.DIME);
+		// can't make change for 70 cents
+		assertEquals(VendingMessage.EXACT_CHANGE_ONLY.message, vendingMachine.getDisplayMessage());
+
+		vendingMachine.acceptCoin(Coin.NICKEL);
+		assertEquals(VendingMessage.INSERT_COIN.message, vendingMachine.getDisplayMessage());
+
+		vendingMachine.selectProduct(Product.CANDY);
+		assertEquals(VendingMessage.SOLD_OUT.message, vendingMachine.getDisplayMessage());
+		assertEquals("$0.75", vendingMachine.getDisplayMessage());
+		assertEquals(VendingMessage.INSERT_COIN.message, vendingMachine.getDisplayMessage());
+
+		vendingMachine.stockProduct(Product.COLA, 1);
+		vendingMachine.selectProduct(Product.COLA);
+		assertEquals("PRICE $1.00", vendingMachine.getDisplayMessage());
+		assertEquals(VendingMessage.INSERT_COIN.message, vendingMachine.getDisplayMessage());
+
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.selectProduct(Product.COLA);
+		assertEquals(VendingMessage.THANK_YOU.message, vendingMachine.getDisplayMessage());
+		assertEquals(VendingMessage.INSERT_COIN.message, vendingMachine.getDisplayMessage());
+	}
+
+	@Before
+	public void setup() {
+		vendingMachine = new VendingMachine();
+	}
+
 	@Test
 	public void whenAcceptCoinIsPassed2NickelsCurrentValueIs10Cents() {
-		final VendingMachine vendingMachine = new VendingMachine();
 
 		vendingMachine.acceptCoin(Coin.NICKEL);
 		vendingMachine.acceptCoin(Coin.NICKEL);
@@ -19,7 +59,6 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenAcceptCoinIsPassedNickelCurrentValueIs5Cents() {
-		final VendingMachine vendingMachine = new VendingMachine();
 
 		vendingMachine.acceptCoin(Coin.NICKEL);
 
@@ -28,7 +67,6 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenReturnCoinsIsCalledCoinsAreReturnedAndMessageIsUpdated() {
-		final VendingMachine vendingMachine = new VendingMachine();
 		vendingMachine.acceptCoin(Coin.QUARTER);
 		vendingMachine.acceptCoin(Coin.NICKEL);
 		vendingMachine.acceptCoin(Coin.DIME);
@@ -46,7 +84,6 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenSelectProductIsPassedCandyWithoutFundsItDisplaysPriceAndDoesNotDispense() {
-		final VendingMachine vendingMachine = new VendingMachine();
 		vendingMachine.stockProduct(Product.CHIPS, 1);
 		final int preColaCount = vendingMachine.getProductCount(Product.CHIPS);
 
@@ -59,7 +96,6 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenSelectProductIsPassedChipsWithoutFundsItDisplaysPriceAndDoesNotDispense() {
-		final VendingMachine vendingMachine = new VendingMachine();
 		vendingMachine.stockProduct(Product.CANDY, 1);
 		final int preColaCount = vendingMachine.getProductCount(Product.CANDY);
 
@@ -72,7 +108,6 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenSelectProductIsPassedColaWithDepositWithoutStockItDisplaysSoldOutThenDepositAmount() {
-		final VendingMachine vendingMachine = new VendingMachine();
 		final int preColaCount = vendingMachine.getProductCount(Product.COLA);
 		vendingMachine.acceptCoin(Coin.QUARTER);
 
@@ -85,7 +120,6 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenSelectProductIsPassedColaWithExtraFundsItDisplaysThankYouDispensesAndReturnsChange() {
-		final VendingMachine vendingMachine = new VendingMachine();
 		vendingMachine.loadChange(Coin.QUARTER, 1);
 		vendingMachine.stockProduct(Product.COLA, 1);
 		final int preColaCount = vendingMachine.getProductCount(Product.COLA);
@@ -106,7 +140,6 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenSelectProductIsPassedColaWithFundsItDisplaysThankYouAndDispense() {
-		final VendingMachine vendingMachine = new VendingMachine();
 		vendingMachine.stockProduct(Product.COLA, 1);
 		final int preColaCount = vendingMachine.getProductCount(Product.COLA);
 		vendingMachine.acceptCoin(Coin.QUARTER);
@@ -123,7 +156,6 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenSelectProductIsPassedColaWithoutFundsItDisplaysPriceAndDoesNotDispense() {
-		final VendingMachine vendingMachine = new VendingMachine();
 		vendingMachine.stockProduct(Product.COLA, 1);
 		final int preColaCount = vendingMachine.getProductCount(Product.COLA);
 
@@ -135,7 +167,6 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenSelectProductIsPassedColaWithoutStockItDisplaysSoldOut() {
-		final VendingMachine vendingMachine = new VendingMachine();
 		final int preColaCount = vendingMachine.getProductCount(Product.COLA);
 
 		vendingMachine.selectProduct(Product.COLA);
@@ -147,12 +178,12 @@ public class VendingMachineTest {
 
 	@Test
 	public void whenWeCanNoMakeChangeThenDisplayExactChange() {
-		final VendingMachine vendingMachine = new VendingMachine();
 		vendingMachine.acceptCoin(Coin.QUARTER);
 		vendingMachine.acceptCoin(Coin.QUARTER);
-		vendingMachine.acceptCoin(Coin.QUARTER);
-		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.DIME);
+		vendingMachine.acceptCoin(Coin.DIME);
 
 		assertEquals(VendingMessage.EXACT_CHANGE_ONLY.message, vendingMachine.getDisplayMessage());
 	}
+
 }

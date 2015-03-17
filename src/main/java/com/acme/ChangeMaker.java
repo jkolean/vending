@@ -39,15 +39,15 @@ public class ChangeMaker {
 		int changeQuarters = 0;
 		int changeDimes = 0;
 		int changeNickels = 0;
-		while (amount >= Coin.QUARTER.coinValue && quarters >= changeQuarters) {
+		while (amount >= Coin.QUARTER.coinValue && quarters > changeQuarters) {
 			amount -= Coin.QUARTER.coinValue;
 			changeQuarters++;
 		}
-		while (amount >= Coin.DIME.coinValue && dimes >= changeDimes) {
+		while (amount >= Coin.DIME.coinValue && dimes > changeDimes) {
 			amount -= Coin.DIME.coinValue;
 			changeDimes--;
 		}
-		while (amount >= Coin.NICKEL.coinValue && nickels >= changeNickels) {
+		while (amount >= Coin.NICKEL.coinValue && nickels > changeNickels) {
 			amount -= Coin.NICKEL.coinValue;
 			changeNickels--;
 		}
