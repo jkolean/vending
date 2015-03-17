@@ -66,6 +66,16 @@ public class VendingMachineTest {
 	}
 
 	@Test
+	public void whenAcceptCoinIsPassedQuarterDimeAndNickeCurrentValueIs40Cents() {
+
+		vendingMachine.acceptCoin(Coin.QUARTER);
+		vendingMachine.acceptCoin(Coin.DIME);
+		vendingMachine.acceptCoin(Coin.NICKEL);
+
+		assertEquals(40, vendingMachine.getAcceptedValue());
+	}
+
+	@Test
 	public void whenReturnCoinsIsCalledCoinsAreReturnedAndMessageIsUpdated() {
 		vendingMachine.acceptCoin(Coin.QUARTER);
 		vendingMachine.acceptCoin(Coin.NICKEL);
