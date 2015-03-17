@@ -86,6 +86,7 @@ public class VendingMachineTest {
 	@Test
 	public void whenSelectProductIsPassedColaWithExtraFundsItDisplaysThankYouDispensesAndReturnsChange() {
 		final VendingMachine vendingMachine = new VendingMachine();
+		vendingMachine.loadChange(Coin.QUARTER, 1);
 		vendingMachine.stockProduct(Product.COLA, 1);
 		final int preColaCount = vendingMachine.getProductCount(Product.COLA);
 		vendingMachine.acceptCoin(Coin.QUARTER);

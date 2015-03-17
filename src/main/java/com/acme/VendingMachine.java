@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class VendingMachine {
 	protected List<Coin> acceptedCoins = new ArrayList<Coin>();
+	protected ChangeMaker changeMaker = new ChangeMaker();
 	protected List<Coin> coinReturn = new ArrayList<Coin>();
 	protected Map<Product, Integer> contents = new HashMap<Product, Integer>();
 	protected String message = "";
@@ -52,6 +53,10 @@ public class VendingMachine {
 		return contents.get(product);
 	}
 
+	public void loadChange(final Coin coin, final int count) {
+		changeMaker.add(coin, count);
+	}
+
 	public void returnCoins() {
 		message = VendingMessage.INSERT_COIN.getDisplayMessage();
 		coinReturn = acceptedCoins;
@@ -80,8 +85,7 @@ public class VendingMachine {
 	}
 
 	private void updateCoinReturn(final int change) {
-		coinReturn = new ArrayList<Coin>();
-		coinReturn.add(Coin.QUARTER);
+		coinReturn = changeMaker.makeChange(change);
 	}
 
 }
